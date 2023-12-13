@@ -3,6 +3,34 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
+from pathlib import Path
+import pandas as pd
+
+csv_filename = 'weather_report.csv'
+def save_csv(datas):
+    new_df = pd.DataFrame(datas)
+    # 检查文件是否存在
+    if Path(csv_filename).exists():
+        # 读取现有的数据
+        old_df = pd.read_csv(csv_filename)
+        # 获取新数据中的id列表
+        new_ids = new_df['id'].tolist()
+        # 筛选出那些在旧数据中不存在的新数据
+        new_df = new_df[~new_df['id'].isin(old_df['id'])]
+        # 如果有新数据，追加到旧数据上
+        if not new_df.empty:
+            df = pd.concat([old_df, new_df], ignore_index=True)
+        else:
+            return
+    else:
+        # 如果文件不存在，直接使用新数据
+        df = new_df
+    # 保存到CSV文件
+    try:
+        df.to_csv(csv_filename, index=False)
+        print("数据已保存到CSV文件")
+    except Exception as e:
+        print(f"保存数据到CSV文件时出错: {e}")
 
 def send_email(city, datas):
     message_text = ""
@@ -65,7 +93,8 @@ def run():
             response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
             datas = response.json().get('warning')
             if datas:
-                send_email(city, datas)
+                # send_email(city, datas)
+                save_csv(datas)
         except requests.RequestException as e:
             print(f"Error occurred when retrieving data for {city}: {e}")
 
