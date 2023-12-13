@@ -4,6 +4,7 @@ on:
   schedule:
     # 每6小时运行一次
     - cron: '0 */6 * * *'
+  workflow_dispatch: # 添加这行来允许手动触发
 
 jobs:
   build:
@@ -18,9 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install requests
-
     - name: Run script
       run: python run_github.py
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
