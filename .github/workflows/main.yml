@@ -1,0 +1,26 @@
+name: Run Weather Warning Script
+
+on:
+  schedule:
+    # 每6小时运行一次
+    - cron: '0 */6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8' # 或者你的Python版本
+    - name: Install dependencies
+      run: |
+        pip install requests
+
+    - name: Run script
+      run: python run_github.py
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
