@@ -32,3 +32,5 @@ jobs:
         git add weather_report.csv
         git commit -m "Update data" -a || exit 0  # 如果没有更改，退出
         git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
