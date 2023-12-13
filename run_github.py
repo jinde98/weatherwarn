@@ -5,7 +5,12 @@ from email.mime.text import MIMEText
 import os
 
 def send_email(city, datas):
-    message_text = "\n".join(f"{key}: {value}" for key, value in datas[0].items())
+    message_text = ""
+    for data in datas:
+        message = "\n".join(f"{key}: {value}" for key, value in data.items())
+        if message_text:  # 如果message_text不为空，则先添加两个换行符
+            message_text += '\n\n'
+        message_text += message  # 追加当前消息
     # SMTP服务器配置
     smtp_server = 'smtp.163.com'  # SMTP服务器地址
     smtp_port = 25  # SMTP服务端口
