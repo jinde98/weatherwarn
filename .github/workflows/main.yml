@@ -19,8 +19,16 @@ jobs:
     - name: Install dependencies
       run: |
         pip install requests
+        pip install pandas
     - name: Run script
       run: python run_github.py
       env:
         API_KEY: ${{ secrets.API_KEY }}
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+    - name: Commit and push if there are changes
+      run: |
+        git config --global user.email "jinde98@163.com"
+        git config --global user.name "jinde98"
+        git add weather_report.csv
+        git commit -m "Update data" -a || exit 0  # 如果没有更改，退出
+        git push
