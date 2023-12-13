@@ -93,7 +93,7 @@ def run():
             response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
             datas = response.json().get('warning')
             if datas:
-                # send_email(city, datas)
+                send_email(city, datas)
                 save_csv(datas)
         except requests.RequestException as e:
             print(f"Error occurred when retrieving data for {city}: {e}")
