@@ -10,7 +10,7 @@ def send_email(city, datas):
     smtp_server = 'smtp.163.com'  # SMTP服务器地址
     smtp_port = 25  # SMTP服务端口
     from_email = 'jinde98@163.com'  # 发件人邮箱
-    to_email = '78178396@qq.com'  # 收件人邮箱
+    to_email = 'huaguorong@app.com.cn'  # 收件人邮箱
     password = os.environ['EMAIL_PASSWORD']  # 从环境变量获取邮箱密码或授权码
 
     msg = MIMEMultipart()
