@@ -1,0 +1,25 @@
+{
+    "email_settings": {
+        "from_email": "witity@163.com",
+        "password": "LACIKTFHWNXFLLIE",
+        "smtp_server": "smtp.163.com",
+        "smtp_port": 25,
+        "to_email": "witity@hotmail.com"
+    },
+    "api_settings": {
+        "url": "https://devapi.qweather.com/v7/warning/now",
+        "key": "0ee43c0bddfd4e9da3fb0eed06b09127",
+        "cities": [
+            ["如东", "101190504"],
+            ["镇江", "101190301"],
+            ["钦州", "101301101"],
+            ["清远", "101281301"],
+            ["孝感", "101200401"],
+            ["淄博", "101120301"],
+            ["儋州", "101310205"],
+            ["宁波", "101210401"],
+            ["盐城", "101190701"],
+            ["昆山", "101190404"]
+        ]
+    }  
+}
