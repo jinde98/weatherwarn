@@ -99,7 +99,7 @@ def send_email(
 def run():
     with open('config.json', 'r', encoding='utf-8') as f:
         settings = json.loads(f.read())
-
+    settings['email_settings']['password'] = os.environ['EMAIL_PASSWORD']
     email_settings = settings['email_settings']
     weather_api_settings = settings['api_settings']
 
