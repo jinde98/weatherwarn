@@ -1,7 +1,6 @@
 {
     "email_settings": {
         "from_email": "jinde98@163.com",
-        #"password": os.environ['EMAIL_PASSWORD'] ,#注释掉，密码用环境变量
         "smtp_server": "smtp.163.com",
         "smtp_port": 25,
         "to_email": "witity@hotmail.com"
