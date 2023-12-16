@@ -1,7 +1,7 @@
 {
     "email_settings": {
-        "from_email": "witity@163.com",
-        "password": "LACIKTFHWNXFLLIE",
+        "from_email": "jinde98@163.com",
+        "password": os.environ['EMAIL_PASSWORD'] ,
         "smtp_server": "smtp.163.com",
         "smtp_port": 25,
         "to_email": "witity@hotmail.com"
