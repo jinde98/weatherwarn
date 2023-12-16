@@ -1,9 +1,9 @@
 {
     "email_settings": {
-        "from_email": "jinde98@163.com",
-        "smtp_server": "smtp.163.com",
-        "smtp_port": 25,
-        "to_email": "witity@hotmail.com"
+        "from_email": "man_kingdom@hotmail.com",
+        "smtp_server": "smtp-mail.outlook.com",
+        "smtp_port": 587,
+        "to_email": "huaguorong@app.com.cn"
     },
     "api_settings": {
         "url": "https://devapi.qweather.com/v7/warning/now",
