@@ -94,6 +94,7 @@ def send_email(
         print("邮件发送成功")
     except Exception as e:
         message = f"邮件发送失败: {e}"
+        print(message)
         error_log(message)
 
 def run():
