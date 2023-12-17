@@ -69,6 +69,11 @@ def send_email(
         return: 
     '''
     message_text = ""
+    datas=[{
+        'pubTime': item['pubTime'],
+        'title': item['title'],
+        'text': item['text']
+        } for item in datas]
     for data in datas:
         message = "\n".join(f"{key}: {value}" for key, value in data.items())
         if message_text:  # 如果message_text不为空，则先添加两个换行符
@@ -137,7 +142,7 @@ def run():
             print(f"Error occurred when retrieving data for {city}: {e}")
 
     if new_datas:
-        send_email(new_citers, new_datas , **email_settings)
+        send_email(new_cities, new_datas , **email_settings)
         save_csv(new_datas)
         
 
