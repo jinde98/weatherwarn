@@ -9,7 +9,6 @@ import pandas as pd
 
 csv_filename = 'weather_report.csv'
 
-
 def save_csv(datas: [dict]) -> None:
     '''
         保存csv文件
@@ -21,8 +20,6 @@ def save_csv(datas: [dict]) -> None:
     if Path(csv_filename).exists():
         # 读取现有的数据
         old_df = pd.read_csv(csv_filename)
-        # 获取新数据中的id列表
-        new_ids = new_df['id'].tolist()
         # 筛选出那些在旧数据中不存在的新数据
         new_df = new_df[~new_df['id'].isin(old_df['id'])]
         # 如果有新数据，追加到旧数据上
@@ -107,7 +104,8 @@ def run():
     url = weather_api_settings['url']
     key = weather_api_settings['key']
     citys = weather_api_settings['cities']
-
+    new_datas=[]
+    new_cities=''
     for city, code in citys:
         params = {
             'location': code,
@@ -119,11 +117,28 @@ def run():
             response = requests.get(url, params=params)
             response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
             datas = response.json().get('warning')
-            if datas:
-                send_email(city, datas , **email_settings)
-                save_csv(datas)
-        except requests.RequestException as e:
-            print(f"Error occurred when retrieving data for {city}: {e}")
+            if datas != []:
+                new_df = pd.DataFrame(datas)
+                # 检查文件是否存在
+                if Path(excel_filename).exists():
+                    # 读取现有的数据
+                    old_df = pd.read_excel(excel_filename, engine='openpyxl')
+                    new_ids = new_df[~new_df['id'].isin(old_df['id'])]['id'].tolist()
+                    datas = [data for data in datas if data['id'] in new_ids]
+                    if datas: 
+                        new_datas.extend(datas)
+                        new_cities = new_cities + '【' + city + '】' 
+
+                else:
+                    new_datas.extend(datas)
+                    new_cities = new_cities + '【' + city + '】' 
+                
+        else:
+            print("Failed to retrieve data:", response.status_code)
+    if datas:
+        send_email(new_citers, new_datas , **email_settings)
+        save_csv(new_datas)
+        
 
 if __name__ == '__main__':
     run()
