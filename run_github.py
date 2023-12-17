@@ -132,10 +132,11 @@ def run():
                 else:
                     new_datas.extend(datas)
                     new_cities = new_cities + '【' + city + '】' 
-                
-        else:
-            print("Failed to retrieve data:", response.status_code)
-    if datas:
+                    
+        except requests.RequestException as e:
+            print(f"Error occurred when retrieving data for {city}: {e}")
+
+    if new_datas:
         send_email(new_citers, new_datas , **email_settings)
         save_csv(new_datas)
         
