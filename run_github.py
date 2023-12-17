@@ -120,9 +120,9 @@ def run():
             if datas != []:
                 new_df = pd.DataFrame(datas)
                 # 检查文件是否存在
-                if Path(excel_filename).exists():
+                if Path(csv_filename).exists():
                     # 读取现有的数据
-                    old_df = pd.read_excel(excel_filename, engine='openpyxl')
+                    old_df = pd.read_excel(csv_filename, engine='openpyxl')
                     new_ids = new_df[~new_df['id'].isin(old_df['id'])]['id'].tolist()
                     datas = [data for data in datas if data['id'] in new_ids]
                     if datas: 
