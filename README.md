@@ -15,6 +15,8 @@
 
 自己发件邮箱、收件箱、邮箱smtp及端口需要根据自己的来修改config.json中的配置，如果是outlook的smtp服务器和端口可以不修改了，默认就是找个。
 
+需要发送城市，修改config.json中的cities列表变量。城市代码见https://github.com/qwd/LocationList中的cvs文件。
+
 和风天气的API key可以自己去申请，免费的key每天可以一天可以申请获得1000条信息。本项目中的key，调试中使用，如有需要自己去申请。
 
 日后待完善功能。
