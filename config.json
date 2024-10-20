@@ -1,6 +1,6 @@
 {
     "email_settings": {
-        "from_email": "man_kingdom@hotmail.com",
+        "from_email": "jd@kmicrsoft.onmicrosoft.com",
         "smtp_server": "smtp-mail.outlook.com",
         "smtp_port": 587,
         "to_email": "huaguorong@app.com.cn"
