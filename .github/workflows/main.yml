@@ -18,8 +18,7 @@ jobs:
         python-version: '3.8' # 或者你的Python版本
     - name: Install dependencies
       run: |
-        pip install requests
-        pip install pandas
+        pip install -r requirements.txt
     - name: Run script
       run: python run_github.py
       env:
