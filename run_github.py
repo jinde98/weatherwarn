@@ -1,15 +1,17 @@
-import json
-import requests
-import smtplib
+from dotenv import load_dotenv
+load_dotenv()
+import json, requests, smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import os
+import os,datetime
 from pathlib import Path
 import pandas as pd
 
-csv_filename = 'weather_report.csv'
+csv_filename = f"{datetime.date.today().year}_weather_report.csv"
+prev_year_csv_filename = f"{datetime.date.today().year - 1}_weather_report.csv"  # 上一年的csv文件
 
-def save_csv(datas: [dict]) -> None:
+
+def save_csv(datas: dict) -> None:
     '''
         保存csv文件
         param: datas: [{key: value}]
@@ -33,9 +35,9 @@ def save_csv(datas: [dict]) -> None:
     # 保存到CSV文件
     try:
         df.to_csv(csv_filename, index=False)
-        print("数据已保存到CSV文件")
+        print(f"数据已保存到{csv_filename}文件")
     except Exception as e:
-        print(f"保存数据到CSV文件时出错: {e}")
+        print(f"保存数据到{csv_filename}文件时出错: {e}")
 
 
 def error_log(message: str) -> None:
@@ -47,10 +49,18 @@ def error_log(message: str) -> None:
     with open('error.log', 'a', encoding='utf-8') as f:
         f.write(message)
 
+def load_previous_year_data():
+    '''
+    加载上一年的数据
+    return: DataFrame 或 None
+    '''
+    if Path(prev_year_csv_filename).exists():
+        return pd.read_csv(prev_year_csv_filename)
+    return None
 
 def send_email(
         city: list,
-        datas: [dict],
+        datas: dict,
         smtp_server: str,
         smtp_port: int, 
         from_email: str, 
@@ -109,6 +119,10 @@ def run():
     url = weather_api_settings['url']
     key = weather_api_settings['key']
     citys = weather_api_settings['cities']
+
+    # 检查是否为新年1月1日
+    is_new_year = datetime.date.today().month == 1 and datetime.date.today().day == 1
+    previous_year_data = load_previous_year_data() if is_new_year else None
     new_datas=[]
     new_cities=''
     for city, code in citys:
@@ -120,23 +134,27 @@ def run():
 
         try:
             response = requests.get(url, params=params)
+            print(response.content)
             response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
             datas = response.json().get('warning')
             if datas != []:
                 new_df = pd.DataFrame(datas)
-                # 检查文件是否存在
+
+                if previous_year_data is not None:
+                    # 对比上一年的数据，筛选出新的数据
+                    new_ids = new_df[~new_df['id'].isin(previous_year_data['id'])]['id'].tolist()
+                    datas = [data for data in datas if data['id'] in new_ids]
+             
                 if Path(csv_filename).exists():
                     # 读取现有的数据
                     old_df = pd.read_csv(csv_filename)
                     new_ids = new_df[~new_df['id'].isin(old_df['id'])]['id'].tolist()
                     datas = [data for data in datas if data['id'] in new_ids]
-                    if datas: 
-                        new_datas.extend(datas)
-                        new_cities = new_cities + '【' + city + '】' 
 
-                else:
+                if datas:  # 经过对比， 筛选出有新数据
                     new_datas.extend(datas)
                     new_cities = new_cities + '【' + city + '】' 
+
                     
         except requests.RequestException as e:
             print(f"Error occurred when retrieving data for {city}: {e}")

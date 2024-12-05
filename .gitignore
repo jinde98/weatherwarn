@@ -1,5 +1,6 @@
 *.log
 *.spec
+.env
 
 __pycache__
 build
